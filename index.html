@@ -1,158 +1,27 @@
 <!DOCTYPE html>
-<html lang="es">
+<html>
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Frases Aleatorias para Nightbot</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #6e8efb, #a777e3);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            padding: 20px;
-            color: #333;
-        }
-        
-        .container {
-            background-color: rgba(255, 255, 255, 0.95);
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-            width: 100%;
-            max-width: 600px;
-            padding: 30px;
-            text-align: center;
-        }
-        
-        h1 {
-            color: #6e8efb;
-            margin-bottom: 20px;
-            font-size: 28px;
-        }
-        
-        .frase-container {
-            background-color: #f8f9fa;
-            border-left: 5px solid #a777e3;
-            padding: 25px;
-            margin: 25px 0;
-            border-radius: 8px;
-            min-height: 120px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        #frase {
-            font-size: 22px;
-            line-height: 1.5;
-            color: #444;
-        }
-        
-        .btn {
-            background: linear-gradient(to right, #6e8efb, #a777e3);
-            color: white;
-            border: none;
-            padding: 12px 25px;
-            font-size: 16px;
-            border-radius: 50px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin-top: 15px;
-            font-weight: 600;
-        }
-        
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(110, 142, 251, 0.4);
-        }
-        
-        .info {
-            margin-top: 25px;
-            font-size: 14px;
-            color: #777;
-        }
-        
-        .loading {
-            color: #a777e3;
-            font-style: italic;
-        }
-        
-        @media (max-width: 600px) {
-            .container {
-                padding: 20px;
-            }
-            
-            #frase {
-                font-size: 18px;
-            }
-            
-            h1 {
-                font-size: 24px;
-            }
-        }
-    </style>
+    <title>Frases Nightbot</title>
 </head>
 <body>
-    <div class="container">
-        <h1>🎲 Frase Aleatoria para Nightbot</h1>
-        
-        <div class="frase-container">
-            <div id="frase" class="loading">Cargando frase aleatoria...</div>
-        </div>
-        
-        <button onclick="cargarFrase()" class="btn">Nueva Frase Aleatoria</button>
-        
-        <div class="info">
-            <p>Esta página muestra una frase aleatoria diferente cada vez que se carga.</p>
-            <p>Usa la URL de esta página en Nightbot con el comando: <code>$(urlfetch [URL-de-esta-página])</code></p>
-        </div>
-    </div>
+    <div id="frase">Cargando frase...</div>
+    <button onclick="cargarFrase()">Otra frase</button>
 
     <script>
-        // Función para cargar una frase aleatoria
-        async function cargarFrase() {
-            try {
-                document.getElementById('frase').className = 'loading';
-                document.getElementById('frase').textContent = 'Cargando...';
-                
-                const response = await fetch('https://gist.githubusercontent.com/yumaikey/8a75d7c65a49ab0e3772243cadb43764/raw/91e3b34318b21c4486e71ff3fc246f72d2280181/fr-alea-night');
-                
-                if (!response.ok) {
-                    throw new Error('Error al cargar las frases');
-                }
-                
-                const text = await response.text();
-                
-                // Dividir el texto en frases (asumiendo que cada frase está en una línea)
-                const frases = text.split('\n').filter(frase => frase.trim() !== '');
-                
-                if (frases.length === 0) {
-                    throw new Error('No se encontraron frases');
-                }
-                
-                // Seleccionar una frase aleatoria
-                const fraseAleatoria = frases[Math.floor(Math.random() * frases.length)];
-                
-                // Mostrar la frase
-                document.getElementById('frase').className = '';
-                document.getElementById('frase').textContent = fraseAleatoria;
-            } catch (error) {
-                document.getElementById('frase').className = '';
-                document.getElementById('frase').textContent = 'Error al cargar las frases: ' + error.message;
-                console.error('Error:', error);
-            }
-        }
-
-        // Cargar una frase al iniciar la página
-        window.onload = cargarFrase;
+    function cargarFrase() {
+        fetch('https://gist.githubusercontent.com/yumaikey/8a75d7c65a49ab0e3772243cadb43764/raw/91e3b34318b21c4486e71ff3fc246f72d2280181/fr-alea-night')
+            .then(response => response.text())
+            .then(data => {
+                const frases = data.split('\n').filter(frase => frase.trim() !== '');
+                const randomFrase = frases[Math.floor(Math.random() * frases.length)];
+                document.getElementById('frase').textContent = randomFrase;
+            })
+            .catch(error => {
+                document.getElementById('frase').textContent = 'Error al cargar';
+            });
+    }
+    window.onload = cargarFrase;
     </script>
 </body>
 </html>
