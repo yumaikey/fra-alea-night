@@ -1,27 +1,8 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <title>Frases Nightbot</title>
-</head>
-<body>
-    <div id="frase">Cargando frase...</div>
-    <button onclick="cargarFrase()">Otra frase</button>
-
-    <script>
-    function cargarFrase() {
-        fetch('https://gist.githubusercontent.com/yumaikey/8a75d7c65a49ab0e3772243cadb43764/raw/91e3b34318b21c4486e71ff3fc246f72d2280181/fr-alea-night')
-            .then(response => response.text())
-            .then(data => {
-                const frases = data.split('\n').filter(frase => frase.trim() !== '');
-                const randomFrase = frases[Math.floor(Math.random() * frases.length)];
-                document.getElementById('frase').textContent = randomFrase;
-            })
-            .catch(error => {
-                document.getElementById('frase').textContent = 'Error al cargar';
-            });
-    }
-    window.onload = cargarFrase;
-    </script>
-</body>
-</html>
+<script>
+fetch('https://gist.githubusercontent.com/yumaikey/8a75d7c65a49ab0e3772243cadb43764/raw/91e3b34318b21c4486e71ff3fc246f72d2280181/fr-alea-night')
+    .then(r => r.text())
+    .then(d => {
+        const f = d.split('\n').filter(l => l.trim() !== '');
+        document.body.innerHTML = f[Math.floor(Math.random() * f.length)];
+    });
+</script>
